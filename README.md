@@ -33,7 +33,6 @@ Static analysis only.
 - No persistence
 - No payload deployment
 
-«Static indicators are research evidence, not automatic proof of malicious activity.»
 
 License
 
