@@ -1,0 +1,90 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# Build output
+build/
+dist/
+out/
+bin/
+obj/
+
+# C/C++
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.exe
+*.pdb
+*.ilk
+
+# Go
+*.test
+*.exe
+*.out
+go.work
+vendor/
+
+# Generated reports
+reports/*.json
+reports/*.html
+reports/*.txt
+
+# Malware/sample files
+samples/*
+!samples/.gitkeep
+
+*.exe
+*.dll
+*.sys
+*.scr
+*.msi
+*.com
+*.bat
+*.cmd
+*.ps1
+*.vbs
+*.js
+
+# Archives
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# Local configuration / secrets
+.env
+.env.*
+*.secret
+config.local.*
