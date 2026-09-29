@@ -1,0 +1,377 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "malware-research-suite/report.schema.json",
+  "title": "Malware Research Static Analysis Report",
+  "description": "Schema for non-executing static malware research reports.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "tool",
+    "safety",
+    "file",
+    "format",
+    "indicators"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+
+    "tool": {
+      "type": "string"
+    },
+
+    "generated_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sample_executed",
+        "network_access",
+        "sample_modified"
+      ],
+      "properties": {
+        "sample_executed": {
+          "const": false
+        },
+        "network_access": {
+          "const": false
+        },
+        "sample_modified": {
+          "const": false
+        }
+      }
+    },
+
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "size",
+        "sha256"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+
+        "path": {
+          "type": "string"
+        },
+
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "md5": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{32}$"
+        },
+
+        "sha1": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{40}$"
+        },
+
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
+      }
+    },
+
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "PE32",
+            "PE32+",
+            "unknown",
+            "non_pe"
+          ]
+        },
+
+        "mz_header": {
+          "type": "boolean"
+        },
+
+        "pe_signature": {
+          "type": "boolean"
+        },
+
+        "entropy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 8
+        },
+
+        "overlay_possible": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "pe": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "is_pe": {
+          "type": "boolean"
+        },
+
+        "machine": {
+          "type": "string"
+        },
+
+        "timestamp_unix": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "entry_point_rva": {
+          "type": "string"
+        },
+
+        "image_base": {
+          "type": "string"
+        },
+
+        "size_of_image": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "subsystem": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "dll_characteristics": {
+          "type": "string"
+        },
+
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          }
+        },
+
+        "imports": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+
+        "suspicious_imports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/suspiciousImport"
+          }
+        },
+
+        "exports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "tls_callbacks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "resource_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+
+    "indicators": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+
+    "strings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "network_artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "urls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "domains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "ipv4": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "ipv4"
+          }
+        }
+      }
+    },
+
+    "registry_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "yara_matches": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/yaraMatch"
+      }
+    },
+
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+
+  "$defs": {
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "raw_size",
+        "entropy"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+
+        "virtual_address": {
+          "type": "string"
+        },
+
+        "virtual_size": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "raw_offset": {
+          "type": "string"
+        },
+
+        "raw_size": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "characteristics": {
+          "type": "string"
+        },
+
+        "entropy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 8
+        },
+
+        "high_entropy": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "suspiciousImport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "category",
+        "api",
+        "dll"
+      ],
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+
+        "api": {
+          "type": "string"
+        },
+
+        "dll": {
+          "type": "string"
+        }
+      }
+    },
+
+    "yaraMatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule"
+      ],
+      "properties": {
+        "rule": {
+          "type": "string"
+        },
+
+        "namespace": {
+          "type": "string"
+        },
+
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
